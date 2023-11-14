@@ -1,4 +1,4 @@
-# docker build -f docker/webapp/Dockerfile -t chat-copilot-webapp .
+# docker build -f webapp/Dockerfile -t max-copilot-webapp .
 
 # builder
 FROM node:lts-alpine as builder
