@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: max-copilot
+spec:
+  selector:
+    matchLabels:
+      app: max-copilot
+  template:
+    metadata:
+      labels:
+        app: max-copilot
+    spec:
+      containers:
+      - name: max-copilot-backend
+        image: tmxmaxcopilotacr.azurecr.io/max-copilot-webapi:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000

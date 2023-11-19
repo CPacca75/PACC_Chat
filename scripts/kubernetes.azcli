@@ -1,0 +1,38 @@
+# Use this Azure CLI scapbook to run Azure CLI commands to manage your Azure resources
+
+# Login to Azure Container Registry
+az acr login --name tmxmaxcopilotacr --username tmxmaxcopilotacr --password 49iZkJiOTKeEsQDfgoobtCYU47EFDs9UvU4L9NErLV+ACRACptmc
+
+# Check the login server of the Azure Container Registry
+az acr list --resource-group max-copilot --query "[].{acrLoginServer:loginServer}" --output table
+
+# Show the cloud endpoints
+az cloud show
+
+# Build the image
+docker build -f webapi/Dockerfile -t tmxmaxcopilotacr.azurecr.io/max-copilot-webapi:latest .
+
+
+# docker scout quickview meciecontainers.azurecr.io/onora-api-dev:latest
+
+# docker scout cves meciecontainers.azurecr.io/onora-api-dev:latest
+
+# docker scout recommendations meciecontainers.azurecr.io/onora-api-dev:latest
+
+# docker scout report meciecontainers.azurecr.io/tanato-fastapi:latest
+# Push the image to Azure Container Registry
+docker push tmxmaxcopilotacr.azurecr.io/max-copilot-webapi 
+
+# List the images in the Azure Container Registry
+az acr repository list --name tmxmaxcopilotacr --output table
+
+# Copy secret from default namespace to project-tanato namespace
+kubectl delete secret dockersecret --namespace project-tanato 
+kubectl get secret dockersecret -n default -o yaml | yq - '.metadata.namespace = "projet-tanato"' -i -v | kubectl apply -n projet-tanato -f -
+
+
+# Deploy the image to Kubernetes
+kubectl apply -f ./infra/deploy.yaml
+
+# Expose the service locally on the development machine needs to be running in a separate terminal
+kubectl port-forward svc/onora-api-dev-local 8000:8000
