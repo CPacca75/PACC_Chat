@@ -1,4 +1,4 @@
-# docker build -f webapi/Dockerfile -t max-copilot-webapi .
+# docker build -f docker/webapi/Dockerfile -t max-copilot-webapi .
 
 # builder
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS builder

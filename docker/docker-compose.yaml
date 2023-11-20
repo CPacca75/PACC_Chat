@@ -13,7 +13,7 @@
 version: "3"
 services:
   chat-copilot-webapp-nginx:
-    image: chat-copilot-webapp-nginx
+    image: max-copilot-webapp-nginx
     build:
       context: ..
       dockerfile: docker/webapp/Dockerfile.nginx
@@ -22,7 +22,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      chat-copilot-webapi:
+      max-copilot-webapi:
         condition: service_started
   #  Alternatively use webapi image to serve frontend files
   #  chat-copilot-webapp:
@@ -37,8 +37,8 @@ services:
   #    depends_on:
   #      chat-copilot-webapi:
   #        condition: service_started
-  chat-copilot-webapi:
-    image: chat-copilot-webapi
+  max-copilot-webapi:
+    image: max-copilot-webapi
     build:
       context: ..
       dockerfile: docker/webapi/Dockerfile
@@ -49,11 +49,11 @@ services:
     environment:
       - Authentication__Type=AzureAd
       - SemanticMemory__Services__Qdrant__Endpoint=http://qdrant:6333
-      - SemanticMemory__Services__Qdrant__APIKey=chat-copilot
+      - SemanticMemory__Services__Qdrant__APIKey=max-copilot
       - SemanticMemory__Services__RabbitMq__Host=rabbitmq
       - SemanticMemory__Services__RabbitMq__Port=5672
-      - SemanticMemory__Services__RabbitMq__Username=chat-copilot
-      - SemanticMemory__Services__RabbitMq__Password=chat-copilot
+      - SemanticMemory__Services__RabbitMq__Username=max-copilot
+      - SemanticMemory__Services__RabbitMq__Password=max-copilot
       - SemanticMemory__ContentStorageType=AzureBlobs
       - SemanticMemory__ImageOcrType=Tesseract
       - SemanticMemory__TextGeneratorType=AzureOpenAI
@@ -65,7 +65,7 @@ services:
       - SemanticMemory__Retrieval__VectorDbType=Qdrant
       - Plugins__1__Name=WebSearcher
       - Plugins__1__ManifestDomain=http://web-searcher
-      - Plugins__1__Key=chat-copilot
+      - Plugins__1__Key=max-copilot
     depends_on:
       qdrant:
         condition: service_started
@@ -78,7 +78,7 @@ services:
     ports:
       - 6333:6333
     environment:
-      - QDRANT__SERVICE__API_KEY=chat-copilot
+      - QDRANT__SERVICE__API_KEY=max-copilot
       - QDRANT__LOG_LEVEL=INFO
   rabbitmq:
     image: rabbitmq:management
@@ -86,8 +86,8 @@ services:
       - 5672:5672
       - 15672:15672
     environment:
-      - RABBITMQ_DEFAULT_USER=chat-copilot
-      - RABBITMQ_DEFAULT_PASS=chat-copilot
+      - RABBITMQ_DEFAULT_USER=max-copilot
+      - RABBITMQ_DEFAULT_PASS=max-copilot
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
       interval: 10s
@@ -99,7 +99,7 @@ services:
       context: ..
       dockerfile: docker/plugins/web-searcher/Dockerfile
       args:
-        - AZURE_FUNCTION_MASTER_KEY=chat-copilot
+        - AZURE_FUNCTION_MASTER_KEY=max-copilot
     env_file:
       - plugins/web-searcher/.env
     healthcheck:
@@ -107,33 +107,33 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  chat-copilot-memorypipeline:
-    image: chat-copilot-memorypipeline
-    build:
-      context: ..
-      dockerfile: docker/memorypipeline/Dockerfile
-    ports:
-      - 3280:80
-    env_file:
-      - memorypipeline/.env
-    environment:
-      - SemanticMemory__Services__Qdrant__Endpoint=http://qdrant:6333
-      - SemanticMemory__Services__Qdrant__APIKey=chat-copilot
-      - SemanticMemory__Services__RabbitMq__Host=rabbitmq
-      - SemanticMemory__Services__RabbitMq__Port=5672
-      - SemanticMemory__Services__RabbitMq__Username=chat-copilot
-      - SemanticMemory__Services__RabbitMq__Password=chat-copilot
-      - SemanticMemory__ContentStorageType=AzureBlobs
-      - SemanticMemory__ImageOcrType=Tesseract
-      - SemanticMemory__TextGeneratorType=AzureOpenAI
-      - SemanticMemory__DataIngestion__OrchestrationType=Distributed
-      - SemanticMemory__DataIngestion__DistributedOrchestration__QueueType=RabbitMQ
-      - SemanticMemory__DataIngestion__VectorDbTypes__0=Qdrant
-      - SemanticMemory__DataIngestion__EmbeddingGeneratorTypes__0=AzureOpenAI
-      - SemanticMemory__Retrieval__EmbeddingGeneratorType=AzureOpenAI
-      - SemanticMemory__Retrieval__VectorDbType=Qdrant
-    depends_on:
-      qdrant:
-        condition: service_started
-      rabbitmq:
-        condition: service_healthy
+  # chat-copilot-memorypipeline:
+  #   image: chat-copilot-memorypipeline
+  #   build:
+  #     context: ..
+  #     dockerfile: docker/memorypipeline/Dockerfile
+  #   ports:
+  #     - 3280:80
+  #   env_file:
+  #     - memorypipeline/.env
+  #   environment:
+  #     - SemanticMemory__Services__Qdrant__Endpoint=http://qdrant:6333
+  #     - SemanticMemory__Services__Qdrant__APIKey=chat-copilot
+  #     - SemanticMemory__Services__RabbitMq__Host=rabbitmq
+  #     - SemanticMemory__Services__RabbitMq__Port=5672
+  #     - SemanticMemory__Services__RabbitMq__Username=chat-copilot
+  #     - SemanticMemory__Services__RabbitMq__Password=chat-copilot
+  #     - SemanticMemory__ContentStorageType=AzureBlobs
+  #     - SemanticMemory__ImageOcrType=Tesseract
+  #     - SemanticMemory__TextGeneratorType=AzureOpenAI
+  #     - SemanticMemory__DataIngestion__OrchestrationType=Distributed
+  #     - SemanticMemory__DataIngestion__DistributedOrchestration__QueueType=RabbitMQ
+  #     - SemanticMemory__DataIngestion__VectorDbTypes__0=Qdrant
+  #     - SemanticMemory__DataIngestion__EmbeddingGeneratorTypes__0=AzureOpenAI
+  #     - SemanticMemory__Retrieval__EmbeddingGeneratorType=AzureOpenAI
+  #     - SemanticMemory__Retrieval__VectorDbType=Qdrant
+  #   depends_on:
+  #     qdrant:
+  #       condition: service_started
+  #     rabbitmq:
+  #       condition: service_healthy
