@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: max-copilot-webapi
+  name: max-copilot-webapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: max-copilot-webapi
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: max-copilot-webapi
+    spec:
+      containers:
+        - env:
+            - name: Authentication__AzureAd__ClientId
+              valueFrom:
+                configMapKeyRef:
+                  key: Authentication__AzureAd__ClientId
+                  name: webapi--env
+            - name: Authentication__AzureAd__TenantId
+              valueFrom:
+                configMapKeyRef:
+                  key: Authentication__AzureAd__TenantId
+                  name: webapi--env
+            - name: Authentication__Type
+              value: AzureAd
+            - name: AzureSpeech__Key
+              valueFrom:
+                configMapKeyRef:
+                  key: AzureSpeech__Key
+                  name: webapi--env
+            - name: AzureSpeech__Region
+              valueFrom:
+                configMapKeyRef:
+                  key: AzureSpeech__Region
+                  name: webapi--env
+            - name: Frontend__AadClientId
+              valueFrom:
+                configMapKeyRef:
+                  key: Frontend__AadClientId
+                  name: webapi--env
+            - name: Plugins__1__Key
+              value: max-copilot
+            - name: Plugins__1__ManifestDomain
+              value: http://web-searcher
+            - name: Plugins__1__Name
+              value: WebSearcher
+            - name: SemanticMemory__ContentStorageType
+              value: AzureBlobs
+            - name: SemanticMemory__DataIngestion__DistributedOrchestration__QueueType
+              value: RabbitMQ
+            - name: SemanticMemory__DataIngestion__EmbeddingGeneratorTypes__0
+              value: AzureOpenAI
+            - name: SemanticMemory__DataIngestion__OrchestrationType
+              value: Distributed
+            - name: SemanticMemory__DataIngestion__VectorDbTypes__0
+              value: Qdrant
+            - name: SemanticMemory__ImageOcrType
+              value: Tesseract
+            - name: SemanticMemory__Retrieval__EmbeddingGeneratorType
+              value: AzureOpenAI
+            - name: SemanticMemory__Retrieval__VectorDbType
+              value: Qdrant
+            - name: SemanticMemory__Services__AzureBlobs__Auth
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureBlobs__Auth
+                  name: webapi--env
+            - name: SemanticMemory__Services__AzureBlobs__ConnectionString
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureBlobs__ConnectionString
+                  name: webapi--env
+            - name: SemanticMemory__Services__AzureOpenAIEmbedding__APIKey
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureOpenAIEmbedding__APIKey
+                  name: webapi--env
+            - name: SemanticMemory__Services__AzureOpenAIEmbedding__Deployment
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureOpenAIEmbedding__Deployment
+                  name: webapi--env
+            - name: SemanticMemory__Services__AzureOpenAIEmbedding__Endpoint
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureOpenAIEmbedding__Endpoint
+                  name: webapi--env
+            - name: SemanticMemory__Services__AzureOpenAIText__APIKey
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureOpenAIText__APIKey
+                  name: webapi--env
+            - name: SemanticMemory__Services__AzureOpenAIText__Deployment
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureOpenAIText__Deployment
+                  name: webapi--env
+            - name: SemanticMemory__Services__AzureOpenAIText__Endpoint
+              valueFrom:
+                configMapKeyRef:
+                  key: SemanticMemory__Services__AzureOpenAIText__Endpoint
+                  name: webapi--env
+            - name: SemanticMemory__Services__Qdrant__APIKey
+              value: max-copilot
+            - name: SemanticMemory__Services__Qdrant__Endpoint
+              value: http://qdrant:6333
+            - name: SemanticMemory__Services__RabbitMq__Host
+              value: rabbitmq
+            - name: SemanticMemory__Services__RabbitMq__Password
+              value: max-copilot
+            - name: SemanticMemory__Services__RabbitMq__Port
+              value: "5672"
+            - name: SemanticMemory__Services__RabbitMq__Username
+              value: max-copilot
+            - name: SemanticMemory__TextGeneratorType
+              value: AzureOpenAI
+          image: max-copilot-webapi
+          name: max-copilot-webapi
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}

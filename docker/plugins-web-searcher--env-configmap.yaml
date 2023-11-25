@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  PluginConfig__BingApiKey: 72acb5773efa4e08abf86e7146bdc8be
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web-searcher-plugins-web-searcher--env
+  name: plugins-web-searcher--env

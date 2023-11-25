@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: qdrant
+  name: qdrant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: qdrant
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: qdrant
+    spec:
+      containers:
+        - env:
+            - name: QDRANT__LOG_LEVEL
+              value: INFO
+            - name: QDRANT__SERVICE__API_KEY
+              value: max-copilot
+          image: qdrant/qdrant
+          name: qdrant
+          ports:
+            - containerPort: 6333
+          resources: {}
+      restartPolicy: Always
+status: {}

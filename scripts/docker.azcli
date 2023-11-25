@@ -1,0 +1,27 @@
+#Change Current directory to the directory where the docker-compose.yml file is located
+cd F:\max-copilot\docker
+
+#Build All the containers
+docker compose build 
+
+#Build a specific container
+#Web API
+docker compose build max-copilot-webapi
+#Web App
+docker compose build max-copilot-webapp-nginx
+#Web Searcher
+docker compose build web-searcher
+
+#Login to the registry
+az acr login --name tmxmaxcopilotacr --username tmxmaxcopilotacr --password 49iZkJiOTKeEsQDfgoobtCYU47EFDs9UvU4L9NErLV+ACRACptmc
+
+docker login
+
+#Push the containers to the registry
+docker compose push
+
+#Run the containers
+docker compose up -d --build
+
+#Shut down the containers
+docker compose down

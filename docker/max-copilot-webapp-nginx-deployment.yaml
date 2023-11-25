@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: max-copilot-webapp-nginx
+  name: max-copilot-webapp-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: max-copilot-webapp-nginx
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: max-copilot-webapp-nginx
+    spec:
+      containers:
+        - image: max-copilot-webapp-nginx
+          name: max-copilot-webapp-nginx
+          ports:
+            - containerPort: 3000
+          resources: {}
+      restartPolicy: Always
+status: {}

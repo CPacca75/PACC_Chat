@@ -13,7 +13,7 @@
 version: "3"
 services:
   max-copilot-webapp-nginx:
-    image: tmxmaxcopilotacr.azurecr.io/max-copilot-webapp-nginx
+    image: max-copilot-webapp-nginx
     build:
       context: ..
       dockerfile: docker/webapp/Dockerfile.nginx
@@ -21,9 +21,9 @@ services:
         - REACT_APP_BACKEND_URI=http://localhost:3080
     ports:
       - 3000:3000
-    depends_on:
-      max-copilot-webapi:
-        condition: service_started
+    # depends_on:
+    #   max-copilot-webapi:
+    #     condition: service_started
   #  Alternatively use webapi image to serve frontend files
   #  chat-copilot-webapp:
   #    image: chat-copilot-webapp
@@ -38,7 +38,7 @@ services:
   #      chat-copilot-webapi:
   #        condition: service_started
   max-copilot-webapi:
-    image: tmxmaxcopilotacr.azurecr.io/max-copilot-webapi
+    image: max-copilot-webapi
     build:
       context: ..
       dockerfile: docker/webapi/Dockerfile
@@ -64,20 +64,19 @@ services:
       - SemanticMemory__Retrieval__EmbeddingGeneratorType=AzureOpenAI
       - SemanticMemory__Retrieval__VectorDbType=Qdrant
       - Plugins__1__Name=WebSearcher
-      - Plugins__1__ManifestDomain=http://max-copilot-web-searcher
+      - Plugins__1__ManifestDomain=http://web-searcher
       - Plugins__1__Key=max-copilot
-    depends_on:
-      qdrant:
-        condition: service_started
-      rabbitmq:
-        condition: service_healthy
-      max-copilot-web-searcher:
-        condition: service_healthy
+    # depends_on:
+    #   qdrant:
+    #     condition: service_started
+    #   rabbitmq:
+    #     condition: service_healthy
+    #   web-searcher:
+    #     condition: service_healthy
   qdrant:
     image: qdrant/qdrant
     ports:
       - 6333:6333
-      - 6334:6334
     environment:
       - QDRANT__SERVICE__API_KEY=max-copilot
       - QDRANT__LOG_LEVEL=INFO
@@ -94,8 +93,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-  max-copilot-web-searcher:
-    image: tmxmaxcopilotacr.azurecr.io/max-copilot-web-searcher
+  web-searcher:
+    image: web-searcher
     ports:
       - 80:80
       - 443:443
@@ -107,13 +106,7 @@ services:
     env_file:
       - plugins/web-searcher/.env
     healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-f",
-          "http://max-copilot-web-searcher/.well-known/ai-plugin.json",
-        ]
+      test: ["CMD", "curl", "-f", "http://localhost/.well-known/ai-plugin.json"]
       interval: 10s
       timeout: 5s
       retries: 5

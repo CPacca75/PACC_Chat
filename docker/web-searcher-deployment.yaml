@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web-searcher
+  name: web-searcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: web-searcher
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose-nodependson.yaml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: web-searcher
+    spec:
+      containers:
+        - env:
+            - name: PluginConfig__BingApiKey
+              valueFrom:
+                configMapKeyRef:
+                  key: PluginConfig__BingApiKey
+                  name: plugins-web-searcher--env
+          image: web-searcher
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://localhost/.well-known/ai-plugin.json
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: web-searcher
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          resources: {}
+      restartPolicy: Always
+status: {}

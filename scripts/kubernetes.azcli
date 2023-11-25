@@ -1,5 +1,5 @@
 # Use this Azure CLI scapbook to run Azure CLI commands to manage your Azure resources
-
+az login --scope https://management.core.windows.net//.default
 # Login to Azure Container Registry
 az acr login --name tmxmaxcopilotacr --username tmxmaxcopilotacr --password 49iZkJiOTKeEsQDfgoobtCYU47EFDs9UvU4L9NErLV+ACRACptmc
 

@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  Authentication__AzureAd__ClientId: cec9b939-c9a2-49fa-81fa-39889008c6e5
+  Authentication__AzureAd__TenantId: 04a4a394-5e9c-4f97-a562-c326a1ca45d4
+  AzureSpeech__Key: ""
+  AzureSpeech__Region: ""
+  Frontend__AadClientId: 223a6b13-7d73-47ad-bad7-40a21ddfe6d4
+  SemanticMemory__Services__AzureBlobs__Auth: jHeojM9zEC1vhOCRl6gQ1yCsU9B/g5I3BFpMOo5CZm8z2JrczfIq3xbtWWlXThwZ+SXBfSMvnVaB+AStr+Vk/w==
+  SemanticMemory__Services__AzureBlobs__ConnectionString: DefaultEndpointsProtocol=https;AccountName=stokupghk7ycogo;AccountKey=jHeojM9zEC1vhOCRl6gQ1yCsU9B/g5I3BFpMOo5CZm8z2JrczfIq3xbtWWlXThwZ+SXBfSMvnVaB+AStr+Vk/w==;EndpointSuffix=core.windows.net
+  SemanticMemory__Services__AzureOpenAIEmbedding__APIKey: 03e2d23635954f4595349219ba5f357c
+  SemanticMemory__Services__AzureOpenAIEmbedding__Deployment: text-embedding-ada-002
+  SemanticMemory__Services__AzureOpenAIEmbedding__Endpoint: https://tmxmax.openai.azure.com/
+  SemanticMemory__Services__AzureOpenAIText__APIKey: 03e2d23635954f4595349219ba5f357c
+  SemanticMemory__Services__AzureOpenAIText__Deployment: gpt-4-32k
+  SemanticMemory__Services__AzureOpenAIText__Endpoint: https://tmxmax.openai.azure.com/
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: max-copilot-webapi-webapi--env
+  name: webapi--env
