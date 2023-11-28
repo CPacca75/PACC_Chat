@@ -53,9 +53,13 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Getting Azure WebApp resource name..."
-$deployment=$(az deployment group show --name $DeploymentName --resource-group $ResourceGroupName --output json | ConvertFrom-Json)
-$webApiUrl = $deployment.properties.outputs.webapiUrl.value
-$webApiName = $deployment.properties.outputs.webapiName.value
+$deployment = $(az deployment group show --name $DeploymentName --resource-group $ResourceGroupName --output json | ConvertFrom-Json)
+# $webApiUrl = $deployment.properties.outputs.webapiUrl.value
+# $webApiName = $deployment.properties.outputs.webapiName.value
+# $pluginNames = $deployment.properties.outputs.pluginNames.value
+
+$webApiUrl = "app-copichat-5tewyigmfvtfc-webapi.azurewebsites.net"
+$webApiName = "app-copichat-5tewyigmfvtfc-webapi"
 $pluginNames = $deployment.properties.outputs.pluginNames.value
 
 if ($null -eq $webApiName) {
